@@ -104,3 +104,21 @@ html {
 .spacer {
   margin-top: 36px;
 }
+
+.input-menu {
+  display: flex;
+  /* width: 50%; */
+  flex-direction: column;
+}
+
+.input-item {
+  display: flex;
+  align-items: center;
+  font-size: 1.4rem;
+}
+
+.form-control.radio {
+  width: 1.8rem;
+  margin-right: 8px;
+  cursor: pointer;
+}

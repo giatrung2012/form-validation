@@ -65,6 +65,29 @@
           <span class="form-msg"></span>
         </div>
 
+        <div class="form-group">
+          <label for="gender" class="form-label">Giới tính</label>
+          <div class="input-menu">
+            <div class="input-item">
+              <input
+                type="radio"
+                name="gender"
+                value="male"
+                class="form-control radio"
+              />Nam
+            </div>
+            <div class="input-item">
+              <input
+                type="radio"
+                name="gender"
+                value="female"
+                class="form-control radio"
+              />Nữ
+            </div>
+          </div>
+          <span class="form-msg"></span>
+        </div>
+
         <button class="form-submit">Đăng ký</button>
       </form>
     </div>
@@ -73,6 +96,7 @@
     <script>
       Validator({
         form: '#form-1',
+        formGroupSelector: '.form-group',
         errorSelector: '.form-msg',
         rules: [
           Validator.isRequired('#fullname'),
@@ -80,13 +104,19 @@
           Validator.isEmail('#email'),
           Validator.minLength('#password', 6),
           Validator.isRequired('#password_confirmation'),
+          Validator.isRequired(
+            'input[name="gender"]',
+            'Vui lòng chọn 1 trong các ô trên'
+          ),
           Validator.isConfirmed(
             '#password_confirmation',
             () => document.querySelector('#form-1 #password').value,
             'Mật khẩu không khớp'
           ),
         ],
-        onsubmit: (data) => {},
+        onsubmit: (data) => {
+          // Call API
+        },
       });
     </script>
   </body>
