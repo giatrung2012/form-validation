@@ -1,12 +1,22 @@
 // Constructor
 function Validator(options) {
+  function getParent(elm, selector) {
+    while (elm.parentElement) {
+      if (elm.parentElement.matches(selector)) {
+        return elm.parentElement;
+      }
+      elm = elm.parentElement;
+    }
+  }
+
   const selectorRules = {};
 
   // Handle validate event
   function validate(inputElm, rule) {
-    const errorElm = inputElm.parentElement.querySelector(
-      options.errorSelector
-    );
+    const errorElm = getParent(
+      inputElm,
+      options.formGroupSelector
+    ).querySelector(options.errorSelector);
     let errorMsg;
 
     // Get rules from selector
@@ -14,18 +24,28 @@ function Validator(options) {
 
     // Loop each rule & check
     for (let i = 0; i < rules.length; i++) {
-      errorMsg = rules[i](inputElm.value);
-      if (errorMsg) {
-        break;
+      switch (inputElm.type) {
+        case 'radio':
+        case 'checkbox':
+          errorMsg = rules[i](
+            formElm.querySelector(rule.selector + ':checked')
+          );
+          break;
+        default:
+          errorMsg = rules[i](inputElm.value);
+          break;
       }
+      if (errorMsg) break;
     }
 
     if (errorMsg) {
       errorElm.innerText = errorMsg;
-      inputElm.parentElement.classList.add('invalid');
+      getParent(inputElm, options.formGroupSelector).classList.add('invalid');
     } else {
       errorElm.innerText = '';
-      inputElm.parentElement.classList.remove('invalid');
+      getParent(inputElm, options.formGroupSelector).classList.remove(
+        'invalid'
+      );
     }
 
     return !errorMsg;
@@ -53,10 +73,19 @@ function Validator(options) {
         });
 
         if (isFormValid) {
+          // In case submit with js or default behavior
           if (typeof options.onSubmit === 'function') {
-            const enableInputs = formElm.querySelector('');
-
-            options.onSubmit();
+            const enableInputs = formElm.querySelectorAll('[name]');
+            const formValues = Array.from(enableInputs).reduce(
+              (values, input) => {
+                values[input.name] = input.value;
+                return values;
+              },
+              {}
+            );
+            options.onSubmit(formValues);
+          } else {
+            formElm.submit();
           }
         }
       };
@@ -71,21 +100,24 @@ function Validator(options) {
         selectorRules[rule.selector] = [rule.test];
       }
 
-      const inputElm = formElm.querySelector(rule.selector);
+      const inputElms = formElm.querySelectorAll(rule.selector);
 
-      if (inputElm) {
+      Array.from(inputElms).forEach((inputElm) => {
         inputElm.onblur = () => {
           validate(inputElm, rule);
         };
 
         inputElm.oninput = () => {
-          const errorElm = inputElm.parentElement.querySelector(
-            options.errorSelector
-          );
+          const errorElm = getParent(
+            inputElm,
+            options.formGroupSelector
+          ).querySelector(options.errorSelector);
           errorElm.innerText = '';
-          inputElm.parentElement.classList.remove('invalid');
+          getParent(inputElm, options.formGroupSelector).classList.remove(
+            'invalid'
+          );
         };
-      }
+      });
     });
   }
 }
