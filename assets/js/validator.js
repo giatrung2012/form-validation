@@ -33,7 +33,6 @@ function Validator(options) {
           break;
         default:
           errorMsg = rules[i](inputElm.value);
-          break;
       }
       if (errorMsg) break;
     }
@@ -78,7 +77,17 @@ function Validator(options) {
             const enableInputs = formElm.querySelectorAll('[name]');
             const formValues = Array.from(enableInputs).reduce(
               (values, input) => {
-                values[input.name] = input.value;
+                switch (input.type) {
+                  case 'radio':
+                  case 'checkbox':
+                    values[input.name] = formElm.querySelector(
+                      `[name="${input.name}"]:checked`
+                    ).value;
+                    break;
+                  default:
+                    values[input.name] = input.value;
+                }
+
                 return values;
               },
               {}
@@ -116,6 +125,21 @@ function Validator(options) {
           getParent(inputElm, options.formGroupSelector).classList.remove(
             'invalid'
           );
+        };
+
+        inputElm.onchange = () => {
+          if (inputElm.value !== null) {
+            validate(inputElm, rule);
+          } else {
+            const errorElm = getParent(
+              inputElm,
+              options.formGroupSelector
+            ).querySelector(options.errorSelector);
+            errorElm.innerText = '';
+            getParent(inputElm, options.formGroupSelector).classList.remove(
+              'invalid'
+            );
+          }
         };
       });
     });

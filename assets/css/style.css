@@ -56,7 +56,7 @@ html {
   font-size: 1.4rem;
 }
 
-.form-control {
+.form-ctrl {
   height: 40px;
   padding: 8px 12px;
   border: 1px solid #b3b3b3;
@@ -65,11 +65,11 @@ html {
   font-size: 1.4rem;
 }
 
-.form-control:hover {
+.form-ctrl:hover {
   border-color: #1dbfaf;
 }
 
-.form-group.invalid .form-control {
+.form-group.invalid .form-ctrl {
   border-color: #f33a58;
 }
 
@@ -117,7 +117,7 @@ html {
   font-size: 1.4rem;
 }
 
-.form-control.radio {
+.form-ctrl.radio {
   width: 1.8rem;
   margin-right: 8px;
   cursor: pointer;

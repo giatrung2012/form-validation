@@ -22,7 +22,7 @@
             name="fullname"
             type="text"
             placeholder="VD: Gia Trung"
-            class="form-control"
+            class="form-ctrl"
           />
           <span class="form-msg"></span>
         </div>
@@ -34,7 +34,7 @@
             name="email"
             type="text"
             placeholder="VD: email@domain.com"
-            class="form-control"
+            class="form-ctrl"
           />
           <span class="form-msg"></span>
         </div>
@@ -46,7 +46,7 @@
             name="password"
             type="password"
             placeholder="Nhập mật khẩu"
-            class="form-control"
+            class="form-ctrl"
           />
           <span class="form-msg"></span>
         </div>
@@ -60,7 +60,7 @@
             name="password_confirmation"
             placeholder="Nhập lại mật khẩu"
             type="password"
-            class="form-control"
+            class="form-ctrl"
           />
           <span class="form-msg"></span>
         </div>
@@ -73,7 +73,7 @@
                 type="radio"
                 name="gender"
                 value="male"
-                class="form-control radio"
+                class="form-ctrl radio"
               />Nam
             </div>
             <div class="input-item">
@@ -81,10 +81,21 @@
                 type="radio"
                 name="gender"
                 value="female"
-                class="form-control radio"
+                class="form-ctrl radio"
               />Nữ
             </div>
           </div>
+          <span class="form-msg"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="province" class="form-label">Tỉnh/TP</label>
+          <select name="province" id="province" class="form-ctrl">
+            <option value="">-- Chọn Tỉnh/TP --</option>
+            <option value="bd">Bình Dương</option>
+            <option value="hcm">TP. Hồ Chí Minh</option>
+            <option value="hn">Hà Nội</option>
+          </select>
           <span class="form-msg"></span>
         </div>
 
@@ -106,7 +117,11 @@
           Validator.isRequired('#password_confirmation'),
           Validator.isRequired(
             'input[name="gender"]',
-            'Vui lòng chọn 1 trong các ô trên'
+            'Vui lòng chọn giới tính'
+          ),
+          Validator.isRequired(
+            '#province',
+            'Vui lòng ấn ô trên để chọn Tỉnh/TP'
           ),
           Validator.isConfirmed(
             '#password_confirmation',
