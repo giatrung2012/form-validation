@@ -78,11 +78,23 @@ function Validator(options) {
             const formValues = Array.from(enableInputs).reduce(
               (values, input) => {
                 switch (input.type) {
+                  case 'file':
+                    values[input.name] = input.files;
+                    break;
                   case 'radio':
-                  case 'checkbox':
                     values[input.name] = formElm.querySelector(
                       `[name="${input.name}"]:checked`
                     ).value;
+                    break;
+                  case 'checkbox':
+                    if (input.matches(':checked')) {
+                      if (!Array.isArray(values[input.name])) {
+                        values[input.name] = [];
+                        values[input.name].push(input.value);
+                      } else {
+                        values[input.name].push(input.value);
+                      }
+                    }
                     break;
                   default:
                     values[input.name] = input.value;
